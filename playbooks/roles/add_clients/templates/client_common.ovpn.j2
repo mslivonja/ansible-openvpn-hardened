@@ -4,6 +4,20 @@ client
 remote {{ openvpn_server }} {{ instance.port }} {{ instance.proto }}
 {% endfor %}
 
+# default DNS
+{% for instance in openvpn_instances %}
+dhcp-option DNS {{ instance.gateway }}
+{% endfor %}
+
+{% set defined = false %}
+{% for instance in openvpn_instances %}
+{% if not defined %}
+# redirect all traffic through VPN. Option explicitly set in client config.
+redirect-gateway def1
+{% set defined = true %}
+{% endif %}
+{% endfor %}
+
 dev tun
 cipher {{ openvpn_cipher }}
 auth {{ openvpn_auth_digest }}

@@ -82,10 +82,21 @@
   register: openvpn_client_certs
   changed_when: false
 
-- name: OpenVPN | Add Clients | Build client configs (.ovpn files; pki embedded)
+- name: OpenVPN | Add Clients | Build client configs (.ovpn files; pki embedded for Linux)
   template:
-    src: client_pki_embedded.ovpn.j2
-    dest: "{{ openvpn_path_pki }}/ovpn/{{ item[0] }}@{{ openvpn_server_common_name }}-pki-embedded.ovpn"
+    src: client_pki_embedded_linux.ovpn.j2
+    dest: "{{ openvpn_path_pki }}/ovpn/{{ item[0] }}@{{ openvpn_server_common_name }}-pki-embedded-linux.ovpn"
+    mode: 0400
+  no_log: true
+  with_together:
+    - "{{ clients_to_add }}"
+    - "{{ openvpn_client_certs.results }}"
+    - "{{ openvpn_client_keys.results }}"
+
+- name: OpenVPN | Add Clients | Build client configs (.ovpn files; pki embedded for Windows)
+  template:
+    src: client_pki_embedded_win.ovpn.j2
+    dest: "{{ openvpn_path_pki }}/ovpn/{{ item[0] }}@{{ openvpn_server_common_name }}-pki-embedded-win.ovpn"
     mode: 0400
   no_log: true
   with_together:
@@ -130,9 +141,17 @@
   tags:
     - skip_ansible_lint
 
-- name: OpenVPN | Add Clients | Get .ovpn files (*-pki-embedded.ovpn)
+- name: OpenVPN | Add Clients | Get .ovpn files (*-pki-embedded-linux.ovpn)
   fetch:
-    src: "{{ openvpn_path_pki }}/ovpn/{{ item }}@{{ openvpn_server_common_name }}-pki-embedded.ovpn"
+    src: "{{ openvpn_path_pki }}/ovpn/{{ item }}@{{ openvpn_server_common_name }}-pki-embedded-linux.ovpn"
+    dest: "{{ local_creds_folder }}/{{ item }}/"
+    flat: yes
+  with_items:
+    - "{{ clients_to_add }}"
+
+- name: OpenVPN | Add Clients | Get .ovpn files (*-pki-embedded-win.ovpn)
+  fetch:
+    src: "{{ openvpn_path_pki }}/ovpn/{{ item }}@{{ openvpn_server_common_name }}-pki-embedded-win.ovpn"
     dest: "{{ local_creds_folder }}/{{ item }}/"
     flat: yes
   with_items:

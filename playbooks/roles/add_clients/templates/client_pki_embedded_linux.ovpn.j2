@@ -1,0 +1,22 @@
+{% include "client_common.ovpn.j2" %}
+
+
+# This updates the resolvconf with dns settings
+# This is Linux OS specific
+setenv PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+script-security 2
+up /etc/openvpn/update-resolv-conf.sh
+down /etc/openvpn/update-resolv-conf.sh
+down-pre
+
+<ca>
+{{ openvpn_ca_contents.stdout }}
+</ca>
+
+<cert>
+{{ item[1].stdout }}
+</cert>
+
+<key>
+{{ item[2].stdout }}
+</key>
