@@ -16,7 +16,7 @@
     name: "{{ item }}"
   with_items: "{{ os_family_specific_pre }}"
   register: install_specific_result
-  until: install_specific_result | success
+  until: install_specific_result is success
   retries: 5
   delay: 5
 
@@ -66,7 +66,7 @@
     name: "{{ item }}"
   with_items: "{{ required_packages }}"
   register: install_required_result
-  until: install_required_result | success
+  until: install_required_result is success
   retries: 5
   delay: 5
   tags:
