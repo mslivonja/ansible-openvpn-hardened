@@ -23,7 +23,7 @@
 - name: OpenVPN | package | Get official OpenVPN APT key
   # Work around for ansible issue https://github.com/ansible/ansible/issues/22647
   get_url:
-    url: https://swupdate.openvpn.net/repos/repo-public.gpg
+    url: https://build.openvpn.net/debian/openvpn/stable/pubkey.gpg
     dest: ~/openvpn.gpg
   when: ansible_os_family == "Debian"
 
@@ -39,7 +39,7 @@
 
 - name: OpenVPN | package | Add the official OpenVPN repository
   apt_repository:
-    repo: 'deb https://swupdate.openvpn.net/apt {{ ansible_lsb.codename }} main'
+    repo: 'deb https://build.openvpn.net/debian/openvpn/stable {{ ansible_lsb.codename }} main'
     state: present
     update_cache: yes
   when: ansible_os_family == "Debian"
