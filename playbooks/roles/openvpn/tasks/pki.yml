@@ -73,8 +73,8 @@
   expect:
     command: ./easyrsa build-ca --req-cn ca@{{ openvpn_server_common_name }}
     responses:
-      'Enter PEM pass phrase:$': "{{ ca_password }}"
-      'Verifying - Enter PEM pass phrase:$': "{{ ca_password }}"
+      'Enter New CA Key Passphrase: $': "{{ ca_password }}"
+      'Verifying - Enter CA Key Passphrase: $': "{{ ca_password }}"
     chdir: "{{ openvpn_path_easyrsa }}"
     creates: "{{ openvpn_path_easyrsa }}/pki/private/ca.key"
 
