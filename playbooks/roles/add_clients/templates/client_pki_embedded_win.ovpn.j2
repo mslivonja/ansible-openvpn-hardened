@@ -1,5 +1,10 @@
 {% include "client_common.ovpn.j2" %}
 
+
+# Fix for the Windows 10 DNS leak described here:
+# https://community.openvpn.net/openvpn/ticket/605
+block-outside-dns
+
 <ca>
 {{ openvpn_ca_contents.stdout }}
 </ca>
