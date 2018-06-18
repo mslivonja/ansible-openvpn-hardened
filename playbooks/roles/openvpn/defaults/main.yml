@@ -83,6 +83,7 @@ required_packages:
   - dnsmasq
   - rsyslog
   - logrotate
+  - vnstat
 
 unwanted_packages:
   - bind9-host
