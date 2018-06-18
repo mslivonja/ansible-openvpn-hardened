@@ -56,6 +56,16 @@
     - { reg: '^(#)?UseDNS', line: 'UseDNS no'}
     - { reg: '^(#)?AllowAgentForwarding', line: 'AllowAgentForwarding no'}
 
+- name: OpenVPN | Harden | Configure SSH service to start after OpenVPN tunnel device
+  blockinfile:
+    path: /etc/systemd/system/sshd.service
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    insertafter: "After=network.target auditd.service"
+    content: |
+        Wants=sys-devices-virtual-net-tun\x2dtcp\x2d443.device
+        After=sys-devices-virtual-net-tun\x2dtcp\x2d443.device
+  
+
 - name: OpenVPN | Harden | Add VPN interfaces using 'ListenAddress' to /etc/ssh/sshd_config
   lineinfile:
     dest: /etc/ssh/sshd_config
